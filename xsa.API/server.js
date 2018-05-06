@@ -4,10 +4,11 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const config = require('./config')
+const userRoutes = require('./routes/account');
 
 const app = express();
 
-mongoose.connect(config.database, (err) => {
+mongoose.connect(config.database, err => {
     if (err) {
         console.log(err)
     } else {
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
 app.use(morgan('dev'));
+app.use('/api/accounts', userRoutes);
 
 
 app.listen(config.port, err => {
