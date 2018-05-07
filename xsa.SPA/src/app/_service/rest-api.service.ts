@@ -13,12 +13,12 @@ getHeaders() {
     return token ? new HttpHeaders().set('Authorization', token) : null;
 }
 
-register(user: User) {
-    return this.http.post(this.baseUrl + '/accounts/signup', user, {headers: this.getHeaders()}).toPromise();
+register(model: any) {
+    return this.http.post(this.baseUrl + '/accounts/signup', model, {headers: this.getHeaders()}).toPromise();
 }
 
-login(user: User) {
-    this.http.post(this.baseUrl + '/accounts/login', user, {headers: this.getHeaders()}).toPromise();
+login(model: any) {
+    this.http.post(this.baseUrl + '/accounts/login', model, {headers: this.getHeaders()}).toPromise();
 }
 
 }

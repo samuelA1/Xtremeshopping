@@ -10,7 +10,7 @@ import { User } from '../_models/user';
   styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent implements OnInit {
-user: User;
+model: any = {};
 btnDisabled = false;
 
   constructor(private restService: RestApiService, private dataService: DataService, private router: Router) { }
@@ -19,11 +19,11 @@ btnDisabled = false;
   }
 
   validate() {
-    if(this.user.name) {
-      if(this.user.email) {
-        if(this.user.password) {
-          if(this.user.password1) {
-            if(this.user.password == this.user.password1) {
+    if(this.model.name) {
+      if(this.model.email) {
+        if(this.model.password) {
+          if(this.model.password1) {
+            if(this.model.password == this.model.password1) {
               return true
             } else {
               this.dataService.error('Passwords do not match');
@@ -46,7 +46,7 @@ btnDisabled = false;
     this.btnDisabled = true;
     try {
       if(this.validate()) {
-        const data = await this.restService.register(this.user);
+        const data = await this.restService.register(this.model);
 
         if (data['success']) {
           localStorage.setItem('token', data['token']);

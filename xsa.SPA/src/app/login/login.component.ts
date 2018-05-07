@@ -10,7 +10,7 @@ import { User } from '../_models/user';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  user: User;
+  model: any = {};
   btnDisabled = false;
 
   constructor(private router: Router, private dataService: DataService, private restService: RestApiService) { }
@@ -19,8 +19,8 @@ export class LoginComponent implements OnInit {
   }
 
   validate() {
-    if(this.user.email) {
-      if(this.user.password) {
+    if(this.model.email) {
+      if(this.model.password) {
         return true;
       } else {
         this.dataService.error('Password is not entered');
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
     this.btnDisabled = true;
     try {
       if (this.validate()) {
-        const user = await this.restService.login(this.user);
+        const user = await this.restService.login(this.model);
         if(user['success']) {
           localStorage.setItem('token', user['token']);
           this.router.navigate(['/']);

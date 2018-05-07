@@ -13,6 +13,7 @@ import { DataService } from './_service/data.service';
 import { MessageComponent } from './message/message.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './_guards/auth.guard';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { LoginComponent } from './login/login.component';
   ],
   providers: [
     RestApiService,
-    DataService
+    DataService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })
