@@ -51,6 +51,11 @@ btnDisabled = false;
         if (data['success']) {
           localStorage.setItem('token', data['token']);
           this.dataService.success('Registration successful');
+          await this.dataService.getProfile();
+          this.router.navigate(['/profile/address'])
+          .then(() => {
+            this.dataService.success('Registration successful! Please enter your shipping address below.')
+          }).catch(error => this.dataService.error(error))
         } else {
           this.dataService.error(data['message']);
         }

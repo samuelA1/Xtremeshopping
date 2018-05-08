@@ -1,4 +1,4 @@
-import { CanActivate,  Router } from "@angular/router";
+import { CanActivate,  Router, RouterStateSnapshot, ActivatedRouteSnapshot } from "@angular/router";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 
@@ -9,12 +9,13 @@ export class AuthGuard implements CanActivate {
     constructor( private router: Router ) {}
 
 
-    canActivate(): Observable<boolean> | boolean {
+    canActivate(route: ActivatedRouteSnapshot , state: RouterStateSnapshot): boolean {
         if(this.token) {
-            this.router.navigate(['/'])
-            return false;
+            return state.url.startsWith('/profile') ? true : (this.router.navigate['/'], 
+        false);
         } else {
-            return true;
+            return state.url.startsWith('/profile') ? (this.router.navigate['/'], false) :
+            true;
         }
     }
 

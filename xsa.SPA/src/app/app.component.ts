@@ -11,7 +11,9 @@ export class AppComponent {
   searchTerm = '';
   isCollapsed = true;
 
-  constructor(private router: Router, private dataService: DataService) {}
+  constructor(private router: Router, public dataService: DataService) {
+    this.dataService.getProfile();
+  }
 
   get token() {
     return localStorage.getItem('token');
@@ -26,6 +28,7 @@ export class AppComponent {
   }
 
   logout() {
+    this.dataService.user = {};
     localStorage.clear();
     this.router.navigate[''];
   }

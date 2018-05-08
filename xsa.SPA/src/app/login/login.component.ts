@@ -34,17 +34,19 @@ export class LoginComponent implements OnInit {
     this.btnDisabled = true;
     try {
       if (this.validate()) {
-        const user = await this.restService.login(this.model);
-        if(user['success']) {
-          localStorage.setItem('token', user['token']);
+        const data = await this.restService.login(this.model);
+        if(data['success']) {
+          localStorage.setItem('token', data['token']);
+          await this.dataService.getProfile();
           this.router.navigate(['/']);
         } else {
-          this.dataService.error(user['message']);
+          this.dataService.error(data['message']);
         }
       }
     } catch (error) {
       this.dataService.error(error['message']);
     }
+    this.btnDisabled = false;
   }
 
 }

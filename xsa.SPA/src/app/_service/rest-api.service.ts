@@ -18,7 +18,23 @@ register(model: any) {
 }
 
 login(model: any) {
-    this.http.post(this.baseUrl + '/accounts/login', model, {headers: this.getHeaders()}).toPromise();
+    return this.http.post(this.baseUrl + '/accounts/login', model, {headers: this.getHeaders()}).toPromise();
 }
+
+getProfile() {
+   return this.http.get(this.baseUrl + '/accounts/profile', {headers: this.getHeaders()}).toPromise();
+}
+
+updateProfile(model: any) {
+   return this.http.post(this.baseUrl + '/accounts/profile', model, {headers: this.getHeaders()}).toPromise();
+}
+
+getAddress() {
+    return this.http.get(this.baseUrl + '/accounts/address', {headers: this.getHeaders()}).toPromise();
+}
+
+updateAddresss(model: any) {
+    return this.http.post(this.baseUrl + '/accounts/address', model, {headers: this.getHeaders()}).toPromise();
+ }
 
 }
