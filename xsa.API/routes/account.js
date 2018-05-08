@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const config = require('../config');
+const checkJwt = require('../middlewares/check-jwt');
 
 const User = require('../models/user');
 
@@ -58,4 +59,59 @@ router.post('/login', (req, res, next) => {
     });
 });
 
+router.route('/profile')
+.get(checkJwt, (req, res, next) => {
+    User.findOne({_id: req.decoded.user._id}, (err, user) => {
+        res.json({
+            success: true,
+            message: 'Successful',
+            user: user
+        });
+    });
+})
+.post(checkJwt, (req, res, next) => {
+    User.findOne({_id: req.decoded.user._id}, (err, user) => {
+        if (err) return next(err);
+
+        if(req.body.name) user.name = req.body.name;
+        if(req.body.email) user.email = req.body.email;
+        if(req.body.password) user.password = req.body.password;
+
+        user.isSeller = req.body.isSeller;
+        user.save();
+        res.json({
+            success: true,
+            message:'Successfully edited your profile'
+        });
+    });
+});
+
+router.route('/address')
+.get(checkJwt, (req, res, next) => {
+    User.findOne({_id: req.decoded.user._id}, (err, user) => {
+        res.json({
+            success: true,
+            message: 'Successful',
+            address: user.address
+        });
+    });
+})
+.post(checkJwt, (req, res, next) => {
+    User.findOne({_id: req.decoded.user._id}, (err, user) => {
+        if (err) return next(err);
+
+        if (req.body.addr1) user.address.addr1 = req.body.addr1;
+        if (req.body.addr2) user.address.addr2 = req.body.addr2;
+        if (req.body.city) user.address.city = req.body.city;
+        if (req.body.state) user.address.state = req.body.state;
+        if (req.body.country) user.address.country = req.body.country;
+        if (req.body.postalCode) user.address.postalCode = req.body.postalCode;
+     
+        user.save();
+        res.json({
+            success: true,
+            message: 'Successfully edited your address'
+        })
+    })
+})
 module.exports = router;
