@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const config = require('./config')
 const userRoutes = require('./routes/account');
+const mainRoutes = require('./routes/main');
+const sellerRoutes = require('./routes/seller');
 
 const app = express();
 
@@ -20,7 +22,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
 app.use(morgan('dev'));
+
+app.use('/api', mainRoutes);
 app.use('/api/accounts', userRoutes);
+app.use('/api/seller', sellerRoutes)
+
 
 
 app.listen(config.port, err => {

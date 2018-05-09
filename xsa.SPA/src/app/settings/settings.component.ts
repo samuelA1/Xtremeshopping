@@ -58,7 +58,12 @@ export class SettingsComponent implements OnInit {
     this.btnDisabled = true;
     try {
       if(this.validate(this.currentSettings)) {
-        const data = await this.restService.updateProfile(this.currentSettings);
+        const data = await this.restService.updateProfile({
+          name: this.currentSettings['name'],
+          email: this.currentSettings['email'],
+          password: this.currentSettings['newPwd'],
+          isSeller: this.currentSettings['isSeller']
+        });
           data['success'] ? ( await this.dataService.getProfile(), this.dataService.success(data['message']))
           : this.dataService.error(data['message']);
       }
