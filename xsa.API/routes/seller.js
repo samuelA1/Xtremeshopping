@@ -9,18 +9,18 @@ const s3 = new aws.S3({accessKeyId: 'AKIAJER55VHNGRSDMNQA',
                        secretAccessKey: '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'});
 const checkJwt = require('../middlewares/check-jwt');
 
-const upload = multer({
+var upload = multer({
     storage: multerS3({
-        s3: s3,
-        bucket: 'xtremeshoppingapp',
-        metadata: function(req, file, cb) {
-            cb(null, {fieldName: file.fieldName});
-        },
-        key: function(req, file, cb) {
-            cb(null, Date.now.toString());
-        },
+      s3: s3,
+      bucket: 'xtremeshoppingapp',
+      metadata: function (req, file, cb) {
+        cb(null, {fieldName: file.fieldname});
+      },
+      key: function (req, file, cb) { 
+        cb(null, Date.now().toString())
+      }
     })
-});
+  });
 
 router.route('/products')
     .get(checkJwt, (req, res, next) => {
@@ -43,6 +43,7 @@ router.route('/products')
         product.category = req.body.categoryId;
         product.description = req.body.description;
         product.title = req.body.title;
+        product.price = req.body.price;
         product.image = req.file.location;
         product.save();
         res.json({

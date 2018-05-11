@@ -8,11 +8,18 @@ import { AuthGuard } from './_guards/auth.guard';
 import { ProfileComponent } from './profile/profile.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AddressComponent } from './address/address.component';
+import { CategoriesComponent } from './categories/categories.component';
+import { PostProductComponent } from './post-product/post-product.component';
+import { MyProductsComponent } from './my-products/my-products.component';
 
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
+  },
+  {
+    path: 'categories',
+    component: CategoriesComponent,
   },
   {
     path: 'register',
@@ -37,6 +44,16 @@ const routes: Routes = [
   {
     path: 'profile/address',
     component: AddressComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'profile/postproduct',
+    component: PostProductComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'profile/myproducts',
+    component: MyProductsComponent,
     canActivate: [AuthGuard]
   },
   {

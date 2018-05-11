@@ -35,6 +35,24 @@ getAddress() {
 
 updateAddresss(model: any) {
     return this.http.post(this.baseUrl + '/accounts/address', model, {headers: this.getHeaders()}).toPromise();
- }
+}
+
+getCategories() {
+    return this.http.get(this.baseUrl + '/categories', {headers: this.getHeaders()}).toPromise();
+}
+
+addCategories(model: any) {
+    return this.http.post(this.baseUrl + '/categories', model, {headers: this.getHeaders()}).toPromise();
+}
+
+getProducts() {
+    return this.http.get(this.baseUrl + '/seller/products', {headers: this.getHeaders()}).toPromise();
+}
+
+addProducts(form: any) {
+    return this.http.post(this.baseUrl + '/seller/products', form, {headers: this.getHeaders()}).toPromise();
+}
+
+
 
 }
