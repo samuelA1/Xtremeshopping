@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from '../_service/data.service';
 import { RestApiService } from '../_service/rest-api.service';
 import { User } from '../_models/user';
@@ -13,7 +13,10 @@ export class LoginComponent implements OnInit {
   model: any = {};
   btnDisabled = false;
 
-  constructor(private router: Router, private dataService: DataService, private restService: RestApiService) { }
+  constructor(private router: Router, 
+    private dataService: DataService, 
+    private restService: RestApiService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
   }

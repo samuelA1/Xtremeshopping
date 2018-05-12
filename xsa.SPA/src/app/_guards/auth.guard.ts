@@ -10,13 +10,10 @@ export class AuthGuard implements CanActivate {
 
 
     canActivate(route: ActivatedRouteSnapshot , state: RouterStateSnapshot): boolean {
-        if(this.token) {
-            return state.url.startsWith('/profile') ? true : (this.router.navigate(['/']), 
-        false);
-        } else {
-            return state.url.startsWith('/profile') ? (this.router.navigate(['/']), false) :
-            true;
-        }
+        if(this.token) return true;
+
+        this.router.navigate(['/login']);
+        return false;
     }
 
 }
