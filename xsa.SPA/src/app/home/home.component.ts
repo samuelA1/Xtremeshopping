@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../_service/data.service';
+import { RestApiService } from '../_service/rest-api.service';
 
 @Component({
   selector: 'app-home',
@@ -6,10 +8,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+products: any;
 
-  constructor() { }
+  constructor(private dataService: DataService, private restService: RestApiService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    try {
+      const data = await this.restService.getAllProducts();
+      data['success'] ? this.products = data['products']
+      : this.dataService.error('Products not loadded');
+
+    } catch(error) {
+      this.dataService.error(error)
+    }
   }
 
 }

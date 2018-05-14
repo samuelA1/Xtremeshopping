@@ -11,23 +11,33 @@ import { AddressComponent } from './address/address.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { PostProductComponent } from './post-product/post-product.component';
 import { MyProductsComponent } from './my-products/my-products.component';
+import { CategoryComponent } from './category/category.component';
+import { ProductComponent } from './product/product.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
+    component: HomeComponent
   },
   {
     path: 'categories',
-    component: CategoriesComponent,
+    component: CategoriesComponent
+  },
+  {
+    path: 'categories/:id',
+    component: CategoryComponent
+  },
+  {
+    path: 'product/:id',
+    component: ProductComponent
   },
   {
     path: 'register',
-    component: RegistrationComponent,
+    component: RegistrationComponent
   },
   {
     path: 'login',
-    component: LoginComponent,
+    component: LoginComponent
   },
   {
     path: 'profile',

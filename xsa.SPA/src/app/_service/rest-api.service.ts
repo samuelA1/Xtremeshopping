@@ -45,7 +45,7 @@ addCategories(model: any) {
     return this.http.post(this.baseUrl + '/categories', model, {headers: this.getHeaders()}).toPromise();
 }
 
-getProducts() {
+getSellerProducts() {
     return this.http.get(this.baseUrl + '/seller/products', {headers: this.getHeaders()}).toPromise();
 }
 
@@ -53,6 +53,16 @@ addProducts(form: any) {
     return this.http.post(this.baseUrl + '/seller/products', form, {headers: this.getHeaders()}).toPromise();
 }
 
+getProducts(categoryId: any, pageNumber: number) {
+    return  this.http.get(this.baseUrl + '/categories/' + categoryId + '?page=' + (pageNumber-1)).toPromise();
+}
 
+getSingleProduct(productId: any) {
+    return this.http.get(this.baseUrl + '/product/' + productId).toPromise();
+}
+
+getAllProducts() {
+    return this.http.get(this.baseUrl + '/products').toPromise();
+}
 
 }

@@ -1,0 +1,43 @@
+<section id="product">
+  <div class="container-fluid p-5">
+    <app-message></app-message>
+    <div *ngIf="!product" class="m-auto">
+      <h1 class="text-center display-3 mt-5">
+        <i class="fa fa-spinner fa-spin"></i>
+      </h1>
+    </div>
+    <div *ngIf="product">
+      <div class="row">
+        <div class="col-lg-4">
+          <img [src]="product.image" alt="productImage" class="image img-thumbnail">
+        </div>
+        <div class="col-lg-5">
+          <div class="row">
+            <div class="col-6">
+              <h4>{{ product.title }}</h4>
+              <p class="m-0">
+                <small>by {{ product.owner.name }}</small>
+              </p>
+              <p class="m-0">
+                <small class="text-muted">{{ product.category.name }}</small>
+              </p>
+            </div>
+            <div class="col-6">
+            </div>
+          </div>
+          <hr>
+          <p class="lead">{{ product.description }}</p>
+        </div>
+        <div class="col-lg-3">
+          <div class="card bg-light">
+            <div class="card-body">
+              <h5 class="card-title">Price: {{ product.price | currency }}</h5>
+              <br>
+              <br>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
