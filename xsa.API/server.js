@@ -10,7 +10,7 @@ const sellerRoutes = require('./routes/seller');
 
 const app = express();
 
-mongoose.connect(config.database, err => {
+mongoose.connect(config.database, {useMongoClient: true}, err => {
     if (err) {
         console.log(err)
     } else {

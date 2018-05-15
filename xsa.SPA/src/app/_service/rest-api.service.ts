@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { User } from '../_models/user';
+import { ReturnStatement } from '@angular/compiler';
 @Injectable()
 export class RestApiService {
     baseUrl = environment.apiUrl;
@@ -63,6 +64,10 @@ getSingleProduct(productId: any) {
 
 getAllProducts() {
     return this.http.get(this.baseUrl + '/products').toPromise();
+}
+
+postReview(review: any) {
+    return this.http.post(this.baseUrl + '/review', review, {headers: this.getHeaders()} ).toPromise();
 }
 
 }

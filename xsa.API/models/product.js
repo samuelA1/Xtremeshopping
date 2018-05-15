@@ -23,7 +23,7 @@ ProductSchema
         if (this.reviews.length == 0) {
             this.rating = 0;
         }else {
-            reviews.map((review) => {
+            this.reviews.map((review) => {
                 rating += review.rating
             });
             rating = rating / this.reviews.length

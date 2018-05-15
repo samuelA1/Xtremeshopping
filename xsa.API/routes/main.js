@@ -20,7 +20,7 @@ router.post('/review', checkJwt, (req, res, next) => {
             if(req.body.title) review.title = req.body.title;
             if(req.body.description) review.description = req.body.description;
             review.rating = req.body.rating;
-            product.review.push(review._id);
+            product.reviews.push(review._id);
             product.save();
             review.save();
             res.json({
@@ -133,7 +133,7 @@ router.get('/product/:id', (req, res, next) => {
     Product.findById({_id: req.params.id})
         .populate('owner')
         .populate('category')
-        .deepPopulate('review.owner')
+        .deepPopulate('reviews.owner')
         .exec((err, product) => {
             if (err) {
                 res.json({

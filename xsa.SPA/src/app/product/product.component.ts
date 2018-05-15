@@ -11,6 +11,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ProductComponent implements OnInit {
   product: any;
   productId: any;
+  review = {
+    title: '',
+    description: '',
+    rating: 0,
+    productId: this.productId
+  };
+  btnDisabled = false;
+
 
   constructor(private dataService: DataService,
      private restService: RestApiService, 
@@ -23,6 +31,25 @@ export class ProductComponent implements OnInit {
     });
     const data = await this.restService.getSingleProduct(this.productId);
     data['success'] ? this.product = data['product'] : (this.router.navigate(['/']),this.dataService.error(data['message']))
+  }
+
+  async postReview() {
+    this.btnDisabled = true;
+    try {
+      const data = await this.restService.postReview({
+        productId: this.productId,
+        title: this.review.title,
+        description: this.review.description,
+        rating: this.review.rating,
+      });
+      console.log(this.review)
+      data['success'] ? this.dataService.success(data['message'])
+      : this.dataService.error('Sorry could not add review');
+      this.btnDisabled = false;
+    } catch (error) {
+      this.dataService.error(error);
+    }
+    
   }
 
 }
