@@ -70,4 +70,8 @@ postReview(review: any) {
     return this.http.post(this.baseUrl + '/review', review, {headers: this.getHeaders()} ).toPromise();
 }
 
+search(query: any, page: any) {
+    return this.http.get(this.baseUrl + '/search?query=' + query + '&page=' + page).toPromise();
+}
+
 }

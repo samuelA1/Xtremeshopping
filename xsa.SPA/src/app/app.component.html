@@ -9,7 +9,7 @@
     <div [ngbCollapse]="isCollapsed" style="align-items: left; margin-left: 50px;" class="collapse navbar-collapse flex-column"
       id="navbarNav">
       <div class="input-group w-75">
-        <input type="text" name="search" class="form-control" [(ngModel)]="searchTerm" (keyup.enter)="search()">
+        <input type="text" name="search" class="form-control" [(ngModel)]="searchTerm" (keyup)="search()">
         <span id="searchBtn" class="bg-warning" (click)="search()">
           <i class="fa fa-search"></i>
         </span>
