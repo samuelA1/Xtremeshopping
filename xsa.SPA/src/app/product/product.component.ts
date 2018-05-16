@@ -18,7 +18,7 @@ export class ProductComponent implements OnInit {
     productId: this.productId
   };
   btnDisabled = false;
-
+  token = localStorage.getItem('token');
 
   constructor(private dataService: DataService,
      private restService: RestApiService, 

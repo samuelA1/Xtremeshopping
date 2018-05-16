@@ -7,6 +7,7 @@ const config = require('./config')
 const userRoutes = require('./routes/account');
 const mainRoutes = require('./routes/main');
 const sellerRoutes = require('./routes/seller');
+const searchRoutes = require('./routes/product-search')
 
 const app = express();
 
@@ -25,7 +26,8 @@ app.use(morgan('dev'));
 
 app.use('/api', mainRoutes);
 app.use('/api/accounts', userRoutes);
-app.use('/api/seller', sellerRoutes)
+app.use('/api/seller', sellerRoutes);
+app.use('/api/search', searchRoutes);
 
 
 
