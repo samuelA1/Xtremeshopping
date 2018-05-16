@@ -4,6 +4,8 @@ const Product = require('../models/product');
 const async = require('async');
 const Review = require('../models/review');
 const checkJwt = require('../middlewares/check-jwt');
+const stripe = require('stripe')('sk_test_JhQBQU6jpKWVJgOr7vAz1PuO')
+const Order =- require('../models/order');
 
 router.post('/review', checkJwt, (req, res, next) => {
     async.waterfall([
@@ -149,5 +151,42 @@ router.get('/product/:id', (req, res, next) => {
             }
         });
 });
+
+router.post('/payment', checkJWT, (req, res, next) => {
+    const stripeToken = req.body.stripeToken;
+    const currentCharges = Math.round(req.body.totalPrice * 100);
+  
+    stripe.customers
+      .create({
+        source: stripeToken.id
+      })
+      .then(function(customer) {
+        return stripe.charges.create({
+          amount: currentCharges,
+          currency: 'usd',
+          customer: customer.id
+        });
+      })
+      .then(function(charge) {
+        const products = req.body.products;
+  
+        let order = new Order();
+        order.owner = req.decoded.user._id;
+        order.totalPrice = currentCharges;
+        
+        products.map(product => {
+          order.products.push({
+            product: product.product,
+            quantity: product.quantity
+          });
+        });
+  
+        order.save();
+        res.json({
+          success: true,
+          message: "Successfully made a payment"
+        });
+      });
+  }); 
 
 module.exports = router;
