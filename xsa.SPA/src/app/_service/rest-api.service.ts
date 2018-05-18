@@ -51,11 +51,13 @@ getSellerProducts() {
 }
 
 addProducts(form: any) {
-    return this.http.post(this.baseUrl + '/seller/products', form, {headers: this.getHeaders()}).toPromise();
+    return this.http.post(this.baseUrl + '/seller/products', form, {headers: this.getHeaders()})
+    .toPromise();
 }
 
 getProducts(categoryId: any, pageNumber: number) {
-    return  this.http.get(this.baseUrl + '/categories/' + categoryId + '?page=' + (pageNumber-1)).toPromise();
+    return  this.http.get(this.baseUrl + '/categories/' + categoryId + '?page=' + (pageNumber-1))
+    .toPromise();
 }
 
 getSingleProduct(productId: any) {
@@ -72,6 +74,11 @@ postReview(review: any) {
 
 search(query: any, page: any) {
     return this.http.get(this.baseUrl + '/search?query=' + query + '&page=' + page).toPromise();
+}
+
+payment(paymentDeatails: any) {
+    return this.http.post(this.baseUrl + '/payment', paymentDeatails, {headers: this.getHeaders()})
+    .toPromise();
 }
 
 }

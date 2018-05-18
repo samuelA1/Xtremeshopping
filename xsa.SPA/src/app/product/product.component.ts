@@ -33,6 +33,12 @@ export class ProductComponent implements OnInit {
     data['success'] ? this.product = data['product'] : (this.router.navigate(['/']),this.dataService.error(data['message']))
   }
 
+  addToCart() {
+    this.dataService.addToCart(this.product)
+      ? this.dataService.success('Product successfully added to cart.')
+      : this.dataService.error('Product has already been added to cart.');
+  }
+
   async postReview() {
     this.btnDisabled = true;
     try {

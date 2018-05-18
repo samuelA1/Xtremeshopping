@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema();
+const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
-    owner: {type: Schema.Types.ObjectId, ref: 'User'},
+    owner: { type: Schema.Types.ObjectId, ref: 'User'},
     totalPrice:{type: Number, default: 0},
     products: [{
         product:{type: Schema.Types.ObjectId, ref: 'Product'},

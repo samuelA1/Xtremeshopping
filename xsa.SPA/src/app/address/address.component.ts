@@ -30,7 +30,7 @@ export class AddressComponent implements OnInit {
 
   async updateAddress() {
     this.btnDisabled = true;
-
+    
     try {
       const data = await this.restService.updateAddresss(this.currentAddress);
       data['success'] ? (await this.dataService.getProfile(), this.dataService.success(data['message']))

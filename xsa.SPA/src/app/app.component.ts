@@ -13,6 +13,7 @@ export class AppComponent {
 
   constructor(private router: Router, public dataService: DataService) {
     dataService.getProfile();
+    this.dataService.cartItems = this.dataService.getCart().length;
   }
   
   get token() {
@@ -29,6 +30,7 @@ export class AppComponent {
 
   logout() {
     this.dataService.user = {};
+    this.dataService.cartItems = 0;
     localStorage.clear();
     this.router.navigate(['']);
   }
