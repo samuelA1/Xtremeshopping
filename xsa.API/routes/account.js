@@ -2,6 +2,7 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 const checkJwt = require('../middlewares/check-jwt');
+const Order = require('../models/order')
 
 const User = require('../models/user');
 
@@ -113,5 +114,45 @@ router.route('/address')
             message: 'Successfully edited your address'
         })
     })
-})
+});
+
+router.get('/orders', checkJwt, (req, res, next) => {
+    Order.find({owner: req.decoded.user._id})
+        .populate('owner')
+        .populate('products.product')
+        .exec((err, orders) => {
+            if(err) {
+                res.json({
+                    success: false,
+                    message: 'Could not find orders'
+                })
+            } else {
+                res.json({
+                    success: true,
+                    message:'Orders found',
+                    orders: orders
+                });
+            }
+        })
+});
+
+router.get('/orders/:id', checkJWT, (req, res, next) => {
+    Order.findOne({ _id: req.params.id })
+      .deepPopulate('products.product.owner')
+      .populate('owner')
+      .exec((err, order) => {
+        if (err) {
+          res.json({
+            success: false,
+            message: "Couldn't find your order"
+          });
+        } else {
+          res.json({
+            success: true,
+            message: 'Found your order',
+            order: order
+          });
+        }
+      });
+  });
 module.exports = router;
