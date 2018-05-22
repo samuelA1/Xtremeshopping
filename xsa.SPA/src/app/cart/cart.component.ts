@@ -80,7 +80,7 @@ export class CartComponent implements OnInit {
     if (!this.quantities.every(data => data > 0)) {
       this.dataService.warning('Quantity cannot be less than one.');
     } else if (!localStorage.getItem('token')) {
-      this.router.navigate(['/login']).then(() => {
+      this.router.navigate(['/login'], {queryParams: {returnUrl: '/cart'}}).then(() => {
         this.dataService.warning('You need to login before making a purchase.');
       });
     } else if (!this.dataService.user['address']) {

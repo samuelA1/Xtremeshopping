@@ -11,14 +11,18 @@ import { User } from '../_models/user';
 })
 export class LoginComponent implements OnInit {
   model: any = {};
-  btnDisabled = false;
+  btnDisabled = false
+  returnUrl;
 
   constructor(private router: Router, 
     private dataService: DataService, 
     private restService: RestApiService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute) {
+     }
 
   ngOnInit() {
+    let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/'
+    this.returnUrl = returnUrl;
   }
 
   validate() {
@@ -41,7 +45,7 @@ export class LoginComponent implements OnInit {
         if(data['success']) {
           localStorage.setItem('token', data['token']);
           await this.dataService.getProfile();
-          this.router.navigate(['']);
+          this.router.navigateByUrl(this.returnUrl)
         } else {
           this.dataService.error(data['message']);
         }

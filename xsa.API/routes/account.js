@@ -136,7 +136,7 @@ router.get('/orders', checkJwt, (req, res, next) => {
         })
 });
 
-router.get('/orders/:id', checkJWT, (req, res, next) => {
+router.get('/orders/:id', checkJwt, (req, res, next) => {
     Order.findOne({ _id: req.params.id })
       .deepPopulate('products.product.owner')
       .populate('owner')
