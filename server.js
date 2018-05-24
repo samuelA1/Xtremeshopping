@@ -30,10 +30,10 @@ app.use('/api/seller', sellerRoutes);
 app.use('/api/search', searchRoutes);
 
 // Set Static Folder
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, './public')));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/index.html'));
+    res.sendFile(path.join(__dirname, './public/index.html'));
   });
 
 app.listen(config.port, err => {
