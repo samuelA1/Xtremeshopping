@@ -22,8 +22,8 @@ router.get('/products', (req, res, next) => {
     },
     function(callback) {
       Product.find({})
-        .skip(perPage * page)
-        .limit(perPage)
+        // .skip(perPage * page)
+        // .limit(perPage)
         .populate('category')
         .populate('owner')
         .exec((err, products) => {
