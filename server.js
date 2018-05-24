@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const config = require('./config')
