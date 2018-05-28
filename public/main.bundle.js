@@ -267,8 +267,15 @@ var RestApiService = /** @class */ (function () {
     RestApiService.prototype.getSingleProduct = function (productId) {
         return this.http.get(this.baseUrl + '/product/' + productId).toPromise();
     };
+    RestApiService.prototype.deleteProduct = function (productId) {
+        return this.http.delete(this.baseUrl + '/product/' + productId, { headers: this.getHeaders() })
+            .toPromise();
+    };
     RestApiService.prototype.getAllProducts = function () {
         return this.http.get(this.baseUrl + '/products').toPromise();
+    };
+    RestApiService.prototype.getOrders = function () {
+        return this.http.get(this.baseUrl + '/accounts/orders', { headers: this.getHeaders() }).toPromise();
     };
     RestApiService.prototype.postReview = function (review) {
         return this.http.post(this.baseUrl + '/review', review, { headers: this.getHeaders() }).toPromise();
@@ -461,12 +468,14 @@ var AddressComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__product_product_component__ = __webpack_require__("./src/app/product/product.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__search_search_component__ = __webpack_require__("./src/app/search/search.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__cart_cart_component__ = __webpack_require__("./src/app/cart/cart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__my_orders_orders_orders_component__ = __webpack_require__("./src/app/my-orders/orders/orders.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -542,6 +551,11 @@ var routes = [
         canActivate: [__WEBPACK_IMPORTED_MODULE_5__guards_auth_guard__["a" /* AuthGuard */]]
     },
     {
+        path: 'profile/orders',
+        component: __WEBPACK_IMPORTED_MODULE_16__my_orders_orders_orders_component__["a" /* OrdersComponent */],
+        canActivate: [__WEBPACK_IMPORTED_MODULE_5__guards_auth_guard__["a" /* AuthGuard */]]
+    },
+    {
         path: '**',
         redirectTo: '',
         pathMatch: 'full'
@@ -566,14 +580,14 @@ var AppRoutingModule = /** @class */ (function () {
 /***/ "./src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-md navbar-dark bg-main\">\n  <div class=\"container-fluid\">\n    <a routerLink=\"/\" class=\"navbar-brand\">\n      <img src=\"./assets/img/logo.png\" alt=\"logo\" id=\"logo\"> Xtreme\n    </a>\n    <button class=\"navbar-toggler\" (click)=\"isCollapsed = !isCollapsed\">\n      <span class=\"navbar-toggler-icon\"></span>\n    </button>\n    <div [ngbCollapse]=\"isCollapsed\" style=\"align-items: left; margin-left: 50px;\" class=\"collapse navbar-collapse flex-column\"\n      id=\"navbarNav\">\n      <div class=\"input-group w-75\">\n        <input type=\"text\" name=\"search\" class=\"form-control\" [(ngModel)]=\"searchTerm\" (keyup)=\"search()\">\n        <span id=\"searchBtn\" class=\"bg-warning\" (click)=\"search()\">\n          <i class=\"fa fa-search\"></i>\n        </span>\n      </div>\n      <div class=\"w-100\">\n        <ul class=\"navbar-nav\">\n          <li class=\"nav-item\">\n            <a (click)=\"collapse()\" routerLink=\"/categories\" routerLinkActive=\"active\" class=\"nav-link\">Categories</a>\n          </li>\n          <li class=\"nav-item ml-0 ml-md-auto\" ngbDropdown #dropdown=\"ngbDropdown\">\n            <a class=\"nav-link dropdown-toggle\" ngbDropdownToggle>\n              <i class=\"fa fa-user mr-1\"></i>\n              <span *ngIf=\"!token\">Accounts</span>\n              <span *ngIf=\"dataService.user\">{{dataService.user.name | titlecase}}</span>\n            </a>\n            <div ngbDropdownMenu class=\"dropdown-menu\">\n              <a *ngIf=\"token\" (click)=\"closeDropdown(dropdown);collapse();\" routerLink=\"/profile\" class=\"dropdown-item\">\n                <i class=\"fa fa-user-circle\" aria-hidden=\"true\"></i> Profile\n              </a>\n              <a *ngIf=\"!token\" (click)=\"closeDropdown(dropdown);collapse();\" routerLink=\"/login\" class=\"dropdown-item\">\n                <i class=\"fa fa-key\" aria-hidden=\"true\"></i> Login\n              </a>\n              <a *ngIf=\"token\" (click)=\"closeDropdown(dropdown);collapse();logout();\" class=\"dropdown-item\">\n                <i class=\"fa fa-key\" aria-hidden=\"true\"></i> Logout\n              </a>\n              <a *ngIf=\"!token\" (click)=\"closeDropdown(dropdown);collapse();\" routerLink=\"/register\" class=\"dropdown-item\">\n                <i class=\"fa fa-group\" aria-hidden=\"true\"></i> Register\n              </a>\n            </div>\n          </li>\n          <li class=\"nav-item ml-0 ml-md-2\">\n            <a (click)=\"collapse()\" routerLink=\"/cart\" routerLinkActive=\"active\" class=\"nav-link\">\n              <i class=\"fa fa-shopping-cart mr-1\"></i>\n              Cart\n              <span *ngIf=\"dataService.cartItems\" class=\"badge badge-warning ml-1\">{{ dataService.cartItems }}</span>\n            </a>\n          </li>\n        </ul>\n      </div>\n    </div>\n  </div>\n</nav>\n\n<router-outlet></router-outlet>\n\n<footer id=\"main-footer\" class=\"bg-main text-white mt-5 p-5\">\n  <div class=\"container\">\n    <p class=\"lead text-center\">Copyright &copy; 2018 Xtreme</p>\n    <p class=\"text-center\">Made by <strong>Samuel Essim</strong></p>\n  </div>\n</footer>\n"
+module.exports = "<nav class=\"navbar navbar-expand-md navbar-dark bg-main\">\n  <div class=\"container-fluid\">\n    <a routerLink=\"/\" class=\"navbar-brand\">\n      <img src=\"./assets/img/logo.png\" alt=\"logo\" id=\"logo\"> Xtreme\n    </a>\n    <button class=\"navbar-toggler\" (click)=\"isCollapsed = !isCollapsed\">\n      <span class=\"navbar-toggler-icon\"></span>\n    </button>\n    <div [ngbCollapse]=\"isCollapsed\" style=\"align-items: left; margin-left: 50px;\" class=\"collapse navbar-collapse flex-column\"\n      id=\"navbarNav\">\n      <div class=\"input-group w-75\">\n        <input type=\"text\" name=\"search\" class=\"form-control\" [(ngModel)]=\"searchTerm\" (keyup)=\"search()\">\n        <span id=\"searchBtn\" class=\"bg-warning\" (click)=\"search()\">\n          <i class=\"fa fa-search\"></i>\n        </span>\n      </div>\n      <div class=\"w-100\">\n        <ul class=\"navbar-nav\">\n          <li class=\"nav-item\">\n            <a (click)=\"collapse()\" routerLink=\"/categories\" routerLinkActive=\"active\" class=\"nav-link\">Categories</a>\n          </li>\n          <li class=\"nav-item ml-0 ml-md-auto\" ngbDropdown #dropdown=\"ngbDropdown\">\n            <a class=\"nav-link dropdown-toggle\" ngbDropdownToggle>\n              <i class=\"fa fa-user mr-1\"></i>\n              <span *ngIf=\"!token\">Accounts</span>\n              <span *ngIf=\"dataService.user\">{{dataService.user.name | titlecase}}</span>\n            </a>\n            <div ngbDropdownMenu class=\"dropdown-menu\">\n              <a *ngIf=\"token\" (click)=\"closeDropdown(dropdown);collapse();\" routerLink=\"/profile\" class=\"dropdown-item\">\n                <i class=\"fa fa-user-circle\" aria-hidden=\"true\"></i> Profile\n              </a>\n              <a *ngIf=\"!token\" (click)=\"closeDropdown(dropdown);collapse();\" routerLink=\"/login\" class=\"dropdown-item\">\n                <i class=\"fa fa-key\" aria-hidden=\"true\"></i> Login\n              </a>\n              <a *ngIf=\"token\" (click)=\"closeDropdown(dropdown);collapse();logout();\" class=\"dropdown-item\">\n                <i class=\"fa fa-key\" aria-hidden=\"true\"></i> Logout\n              </a>\n              <a *ngIf=\"!token\" (click)=\"closeDropdown(dropdown);collapse();\" routerLink=\"/register\" class=\"dropdown-item\">\n                <i class=\"fa fa-group\" aria-hidden=\"true\"></i> Register\n              </a>\n            </div>\n          </li>\n          <li class=\"nav-item ml-0 ml-md-2\">\n            <a (click)=\"collapse()\" routerLink=\"/cart\" routerLinkActive=\"active\" class=\"nav-link\">\n              <i class=\"fa fa-shopping-cart mr-1\"></i>\n              Cart\n              <span *ngIf=\"dataService.cartItems\" class=\"badge badge-warning ml-1\">{{ dataService.cartItems }}</span>\n            </a>\n          </li>\n        </ul>\n      </div>\n    </div>\n  </div>\n</nav>\n\n<router-outlet></router-outlet>\n\n<footer id=\"main-footer\" class=\"bg-main text-white mt-5 p-5 footer\">\n  <div class=\"container\">\n    <p class=\"lead text-center\">Copyright &copy; 2018 Xtreme</p>\n    <p class=\"text-center\">Made by <strong>Samuel Essim</strong></p>\n  </div>\n</footer>\n"
 
 /***/ }),
 
 /***/ "./src/app/app.component.scss":
 /***/ (function(module, exports) {
 
-module.exports = "#searchBtn {\n  cursor: pointer;\n  border: none;\n  padding: 0.375rem 0.75rem;\n  margin-bottom: 0;\n  font-size: 1rem;\n  font-weight: 400;\n  line-height: 1.5;\n  border-top-right-radius: 0.25rem;\n  border-bottom-right-radius: 0.25rem; }\n\n#logo {\n  width: 50px; }\n"
+module.exports = "#searchBtn {\n  cursor: pointer;\n  border: none;\n  padding: 0.375rem 0.75rem;\n  margin-bottom: 0;\n  font-size: 1rem;\n  font-weight: 400;\n  line-height: 1.5;\n  border-top-right-radius: 0.25rem;\n  border-bottom-right-radius: 0.25rem; }\n\n#logo {\n  width: 50px; }\n\n.footer {\n  position: relative;\n  left: 0;\n  bottom: 0;\n  width: 100%; }\n"
 
 /***/ }),
 
@@ -675,12 +689,14 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__product_product_component__ = __webpack_require__("./src/app/product/product.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__search_search_component__ = __webpack_require__("./src/app/search/search.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__cart_cart_component__ = __webpack_require__("./src/app/cart/cart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__my_orders_orders_orders_component__ = __webpack_require__("./src/app/my-orders/orders/orders.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -725,7 +741,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_20__category_category_component__["a" /* CategoryComponent */],
                 __WEBPACK_IMPORTED_MODULE_21__product_product_component__["a" /* ProductComponent */],
                 __WEBPACK_IMPORTED_MODULE_22__search_search_component__["a" /* SearchComponent */],
-                __WEBPACK_IMPORTED_MODULE_23__cart_cart_component__["a" /* CartComponent */]
+                __WEBPACK_IMPORTED_MODULE_23__cart_cart_component__["a" /* CartComponent */],
+                __WEBPACK_IMPORTED_MODULE_24__my_orders_orders_orders_component__["a" /* OrdersComponent */],
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
@@ -1561,10 +1578,132 @@ var MessageComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/my-orders/orders/orders.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<section id=\"orders\">\n  <div class=\"container\">\n    <div class=\"row\">\n        <h1>Orders</h1>\n        <table class=\"table\">\n          <thead>\n            <tr>\n              <th>Customer</th>\n              <th>Number\n                of items bought\n              </th>\n              <th>Total price</th>\n            </tr>\n          </thead> \n          <tbody>\n            <tr *ngFor=\"let order of orders\">\n              <td>{{ order.owner.name | titlecase}}</td>\n              <td>\n                {{sum}} items bought\n              </td>\n              <td>{{ order.totalPrice | currency: 'USD':true}}</td>\n            </tr>\n          </tbody> \n        </table>\n    </div>\n  </div>\n</section>"
+
+/***/ }),
+
+/***/ "./src/app/my-orders/orders/orders.component.scss":
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/my-orders/orders/orders.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return OrdersComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__service_rest_api_service__ = __webpack_require__("./src/app/_service/rest-api.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__service_data_service__ = __webpack_require__("./src/app/_service/data.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+var OrdersComponent = /** @class */ (function () {
+    function OrdersComponent(restService, dataService) {
+        this.restService = restService;
+        this.dataService = dataService;
+        this.sum = 0;
+    }
+    OrdersComponent.prototype.ngOnInit = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var data, key, key, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.restService.getOrders()];
+                    case 1:
+                        data = _a.sent();
+                        if (data['success']) {
+                            this.orders = data['orders'];
+                            for (key in this.orders) {
+                                this.quantity = this.orders[key].products;
+                            }
+                            for (key in this.quantity) {
+                                this.sum += this.quantity[key].quantity;
+                            }
+                        }
+                        else {
+                            this.dataService.error(data['message']);
+                        }
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_1 = _a.sent();
+                        this.dataService.error(error_1);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    OrdersComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+            selector: 'app-orders',
+            template: __webpack_require__("./src/app/my-orders/orders/orders.component.html"),
+            styles: [__webpack_require__("./src/app/my-orders/orders/orders.component.scss")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__service_rest_api_service__["a" /* RestApiService */], __WEBPACK_IMPORTED_MODULE_2__service_data_service__["a" /* DataService */]])
+    ], OrdersComponent);
+    return OrdersComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/my-products/my-products.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section id=\"myProducts\">\n  <div class=\"container p-5\">\n    <app-message></app-message>\n    <div *ngIf=\"!products\" class=\"m-auto\">\n      <h1 class=\"text-center display-3 mt-5\">\n        <i class=\"fa fa-spinner fa-spin\"></i>\n      </h1>\n    </div>\n    <h3 *ngIf=\"products && !products.length\" class=\"display-2 text-center mt-5\">My Products is Empty</h3>\n    <div *ngIf=\"products && products.length\" class=\"row\">\n      <div class=\"col\">\n        <h4 class=\"display-4\">My Products</h4>\n        <div class=\"row\">\n          <div class=\"offset-10 col-2 d-none d-md-block\">\n            <p>\n              <small class=\"text-muted\">Price</small>\n            </p>\n          </div>\n        </div>\n        <hr class=\"mt-0\">\n        <div *ngFor=\"let product of products\" class=\"product\">\n          <div class=\"row\">\n            <div class=\"col-4 col-md-2\">\n              <a routerLink=\"/product/{{ product.id }}\">\n                <img src=\"{{ product.image }}\" alt=\"image\" class=\"img-fluid img-thumbnail\">\n              </a>\n            </div>\n            <div class=\"col-5 col-md-8\">\n              <h5>\n                <a routerLink=\"/product/{{ product.id }}\">{{ product.title }}</a>\n                <p class=\"m-0\">\n                  <small class=\"text-muted\">{{ product.category.name }}</small>\n                </p>\n              </h5>\n            </div>\n            <div class=\"col-2\">\n              <h6 class=\"font-weight-bold text-danger\">{{ product.price | currency }}</h6>\n            </div>\n          </div>\n          <hr>\n        </div>\n      </div>\n    </div>\n  </div>\n</section>\n"
+module.exports = "<section id=\"myProducts\">\n  <div class=\"container p-5\">\n    <app-message></app-message>\n    <div *ngIf=\"!products\" class=\"m-auto\">\n      <h1 class=\"text-center display-3 mt-5\">\n        <i class=\"fa fa-spinner fa-spin\"></i>\n      </h1>\n    </div>\n    <h3 *ngIf=\"products && !products.length\" class=\"display-2 text-center mt-5\">My Products is Empty</h3>\n    <div *ngIf=\"products && products.length\" class=\"row\">\n      <div class=\"col\">\n        <h4 class=\"display-4\">My Products</h4>\n        <div class=\"row\">\n          <div class=\"offset-10 col-2 d-none d-md-block\">\n            <p>\n              <small class=\"text-muted\">Price</small>\n            </p>\n          </div>\n        </div>\n        <hr class=\"mt-0\">\n        <div *ngFor=\"let product of products; let i = index\" class=\"product\">\n          <div class=\"row\">\n            <div class=\"col-4 col-md-2\">\n              <a routerLink=\"/product/{{ product.id }}\">\n                <img src=\"{{ product.image }}\" alt=\"image\" class=\"img-fluid img-thumbnail\">\n              </a>\n            </div>\n            <div class=\"col-5 col-md-8\">\n              <h5>\n                <a routerLink=\"/product/{{ product.id }}\">{{ product.title }}</a>\n                <p class=\"m-0\">\n                  <small class=\"text-muted\">{{ product.category.name }}</small>\n                </p>\n                <a class=\"text-danger\" (click)=\"removeProduct(i, product)\">Delete</a>\n              </h5>\n            </div>\n            <div class=\"col-2\">\n              <h6 class=\"font-weight-bold text-danger\">{{ product.price | currency }}</h6>\n            </div>\n          </div>\n          <hr>\n        </div>\n      </div>\n    </div>\n  </div>\n</section>\n"
 
 /***/ }),
 
@@ -1654,6 +1793,31 @@ var MyProductsComponent = /** @class */ (function () {
                         this.dataService.error(error_1);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    MyProductsComponent.prototype.removeProduct = function (index, product) {
+        return __awaiter(this, void 0, void 0, function () {
+            var data, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        this.products.splice(index, 1);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.restService.deleteProduct(product._id)];
+                    case 2:
+                        data = _a.sent();
+                        (data['success']) ? (this.dataService.success(data['message']))
+                            : this.dataService.error(data['message']);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_2 = _a.sent();
+                        this.dataService.error(error_2);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -2032,7 +2196,7 @@ var ProductComponent = /** @class */ (function () {
 /***/ "./src/app/profile/profile.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section id=\"profile\">\n  <div class=\"container p-5\">\n    <h4 class=\"display-4\">My Profile</h4>\n    <hr>\n    <div *ngIf=\"!dataService.user\" class=\"m-auto\">\n      <h1 class=\"text-center display-3 mt-5\">\n        <i class=\"fa fa-spinner fa-spin\"></i>\n      </h1>\n    </div>\n    <div *ngIf=\"dataService.user\" class=\"row mt-5\">\n      <div class=\"col-md-3\">\n        <img [src]=\"dataService.user.picture\" alt=\"userimage\" class=\"rounded-circle image\">\n      </div>\n      <div class=\"col-md-8 ml-3\">\n        <p id=\"name\" class=\"lead\">{{ dataService.user.name | titlecase }}</p>\n        <!-- <a routerLink=\"/profile/orders\" class=\"btn btn-warning\">My Orders</a> -->\n        <br>\n        <br>\n        <a routerLink=\"/profile/settings\" class=\"btn btn-warning\">Change Account Settings</a>\n        <br>\n        <br>\n        <a routerLink=\"/profile/address\" class=\"btn btn-warning\">Change Shipping Address</a>\n        <br>\n        <br>\n        <div *ngIf=\"dataService.user.isSeller\">\n          <p class=\"lead\">Seller Actions</p>\n          <hr>\n          <div class=\"row\">\n            <div class=\"col-md-6 mb-3\">\n              <a routerLink=\"/profile/postproduct\" class=\"btn btn-outline-success btn-block\">Post Product for Sale</a>\n            </div>\n            <div class=\"col-md-6\">\n              <a routerLink=\"/profile/myproducts\" class=\"btn btn-outline-info btn-block\">My Products</a>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</section>\n"
+module.exports = "<section id=\"profile\">\n  <div class=\"container p-5\">\n    <h4 class=\"display-4\">My Profile</h4>\n    <hr>\n    <div *ngIf=\"!dataService.user\" class=\"m-auto\">\n      <h1 class=\"text-center display-3 mt-5\">\n        <i class=\"fa fa-spinner fa-spin\"></i>\n      </h1>\n    </div>\n    <div *ngIf=\"dataService.user\" class=\"row mt-5\">\n      <div class=\"col-md-3\">\n        <img [src]=\"dataService.user.picture\" alt=\"userimage\" class=\"rounded-circle image\">\n      </div>\n      <div class=\"col-md-8 ml-3\">\n        <p id=\"name\" class=\"lead\">{{ dataService.user.name | titlecase }}</p>\n        <a routerLink=\"/profile/orders\" class=\"btn btn-warning\">My Orders</a>\n        <br>\n        <br>\n        <a routerLink=\"/profile/settings\" class=\"btn btn-warning\">Change Account Settings</a>\n        <br>\n        <br>\n        <a routerLink=\"/profile/address\" class=\"btn btn-warning\">Change Shipping Address</a>\n        <br>\n        <br>\n        <div *ngIf=\"dataService.user.isSeller\">\n          <p class=\"lead\">Seller Actions</p>\n          <hr>\n          <div class=\"row\">\n            <div class=\"col-md-6 mb-3\">\n              <a routerLink=\"/profile/postproduct\" class=\"btn btn-outline-success btn-block\">Post Product for Sale</a>\n            </div>\n            <div class=\"col-md-6\">\n              <a routerLink=\"/profile/myproducts\" class=\"btn btn-outline-info btn-block\">My Products</a>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</section>\n"
 
 /***/ }),
 
