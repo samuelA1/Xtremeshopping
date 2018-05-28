@@ -18,7 +18,7 @@
           </div>
         </div>
         <hr class="mt-0">
-        <div *ngFor="let product of products" class="product">
+        <div *ngFor="let product of products; let i = index" class="product">
           <div class="row">
             <div class="col-4 col-md-2">
               <a routerLink="/product/{{ product.id }}">
@@ -31,6 +31,7 @@
                 <p class="m-0">
                   <small class="text-muted">{{ product.category.name }}</small>
                 </p>
+                <a class="text-danger" (click)="removeProduct(i, product)">Delete</a>
               </h5>
             </div>
             <div class="col-2">

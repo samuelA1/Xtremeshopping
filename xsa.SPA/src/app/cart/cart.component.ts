@@ -34,7 +34,7 @@ export class CartComponent implements OnInit {
     });
     return total;
   }
-
+  
   removeProduct(index, product) {
     this.quantities.splice(index, 1);
     this.dataService.removeFromCart(product);

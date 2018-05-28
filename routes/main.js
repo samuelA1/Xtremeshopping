@@ -132,6 +132,22 @@ router.route('/categories')
       });
   });
 
+  router.delete('/product/:id', checkJWT, (req, res, next) => {
+    Product.findByIdAndRemove(req.params.id, (err) => {
+      if (err) {
+        res.json({
+          success: false,
+          message: 'Failed to delete product'
+        });
+      } else {
+        res.json({
+          success: true,
+          message: 'Product successfully deleted'
+        })
+      }
+    })
+  })
+
 
   router.post('/review', checkJWT, (req, res, next) => {
     async.waterfall([

@@ -1,0 +1,27 @@
+<section id="orders">
+  <div class="container">
+    <div class="row">
+        <h1>Orders</h1>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Number
+                of items bought
+              </th>
+              <th>Total price</th>
+            </tr>
+          </thead> 
+          <tbody>
+            <tr *ngFor="let order of orders">
+              <td>{{ order.owner.name | titlecase}}</td>
+              <td>
+                {{sum}} items bought
+              </td>
+              <td>{{ order.totalPrice | currency: 'USD':true}}</td>
+            </tr>
+          </tbody> 
+        </table>
+    </div>
+  </div>
+</section>

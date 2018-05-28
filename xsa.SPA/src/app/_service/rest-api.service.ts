@@ -64,8 +64,17 @@ getSingleProduct(productId: any) {
     return this.http.get(this.baseUrl + '/product/' + productId).toPromise();
 }
 
+deleteProduct(productId: any) {
+    return this.http.delete(this.baseUrl + '/product/' + productId, {headers: this.getHeaders()})
+    .toPromise();
+}
+
 getAllProducts() {
     return this.http.get(this.baseUrl + '/products').toPromise();
+}
+
+getOrders() {
+    return this.http.get(this.baseUrl + '/accounts/orders', {headers: this.getHeaders()}).toPromise();
 }
 
 postReview(review: any) {
